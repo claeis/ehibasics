@@ -25,7 +25,7 @@ package ch.ehi.basics.logging;
  * errors (program errors or input errors)
  * keep references (no output in release/production code)
  * @author ce
- * @version $Revision: 1.1 $ $Date: 2005-02-08 11:55:13 $
+ * @version $Revision: 1.2 $ $Date: 2005-02-21 13:09:44 $
  */
 public class EhiLogger {
 	static private EhiLogger instance=null; 
@@ -65,6 +65,9 @@ public class EhiLogger {
 	public void setTraceFiler(boolean enableFilter){
 		filterTrace=enableFilter;
 	}
+	public boolean getTraceFiler(){
+		return filterTrace;
+	}
 	/** dispatch any log event.
 	 */
 	static public void logEvent(LogEvent event){
@@ -83,7 +86,7 @@ public class EhiLogger {
 			throw new java.lang.IllegalArgumentException("illegal kind");
 		}
 		String msg=event.getEventMsg();
-		if(msg==null || msg.trim().length()==0){
+		if((msg==null || msg.trim().length()==0) && event.getException()==null){
 			throw new java.lang.IllegalArgumentException("null or empty log-message");
 		}
 		// notify event to all registered listeners
@@ -137,11 +140,7 @@ public class EhiLogger {
 	/** errors (program errors or input errors)
 	 */
 	static public void logError(Throwable ex){
-		String msg=ex.getLocalizedMessage();
-		if(msg==null){
-			msg=ex.getClass().getName();
-		}
-		logEvent(new StdLogEvent(LogEvent.ERROR,msg,ex,getOrigin()));
+		logEvent(new StdLogEvent(LogEvent.ERROR,null,ex,getOrigin()));
 	}
 	static private StackTraceElement getOrigin(){
 		Throwable tr=new Throwable();
