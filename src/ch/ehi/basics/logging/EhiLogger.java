@@ -17,15 +17,10 @@
  */
 package ch.ehi.basics.logging;
 
-/**
- * log normal system state (normally not shown to user)
- * log expected but unusual system state (normally not shown to user)
- * inform user about current system state (e.g. progress information)
- * inform user about adaptions take by the code (e.g. ignoring some supefluous input) 
- * errors (program errors or input errors)
- * keep references (no output in release/production code)
+/** Single point of access to the logging system. 
+ * It is a usage error, to have no registered listeners. 
  * @author ce
- * @version $Revision: 1.2 $ $Date: 2005-02-21 13:09:44 $
+ * @version $Revision: 1.3 $ $Date: 2005-02-21 17:03:33 $
  */
 public class EhiLogger {
 	static private EhiLogger instance=null; 
@@ -45,6 +40,9 @@ public class EhiLogger {
 		  throw new java.lang.IllegalArgumentException("cannot remove null or unknown logListener");
 		}
 		getInstance().logListenerv.remove(logListener);
+		if(getInstance().logListenerv.size()==0){
+			StdListener.getInstance().logEvent(new StdLogEvent(LogEvent.ERROR,"no logging listeners left",null,getOrigin()));
+		}
 	  return;
 	}
 	/** get unique instance
@@ -65,12 +63,14 @@ public class EhiLogger {
 	public void setTraceFiler(boolean enableFilter){
 		filterTrace=enableFilter;
 	}
+	/** gets the current filtering state.
+	 */
 	public boolean getTraceFiler(){
 		return filterTrace;
 	}
 	/** dispatch any log event.
 	 */
-	static public void logEvent(LogEvent event){
+	public void logEvent(LogEvent event){
 		// filter event
 		int kind=event.getEventKind();
 		if(getInstance().filterTrace){
@@ -83,65 +83,73 @@ public class EhiLogger {
 			}
 		}
 		if(kind<LogEvent.FIRST_KIND || kind>LogEvent.LAST_KIND){
-			throw new java.lang.IllegalArgumentException("illegal kind");
+			StdListener.getInstance().logEvent(new StdLogEvent(LogEvent.ERROR,"illegal kind",null,getOrigin()));
+			return;
 		}
 		String msg=event.getEventMsg();
 		if((msg==null || msg.trim().length()==0) && event.getException()==null){
-			throw new java.lang.IllegalArgumentException("null or empty log-message");
+			StdListener.getInstance().logEvent(new StdLogEvent(LogEvent.ERROR,"null or empty log-message",null,getOrigin()));
+			return;
 		}
 		// notify event to all registered listeners
 		java.util.Iterator it=getInstance().logListenerv.iterator();
 		while(it.hasNext()){
 		  LogListener listener=(LogListener)it.next();
-		  listener.logEvent(event);
+		  try{
+			listener.logEvent(event);
+		  }catch(Throwable ex){
+		  	StdListener.getInstance().logEvent(new StdLogEvent(LogEvent.ERROR,null,ex,getOrigin()));
+		  }
 		}
 	}
-	/**	log a temporary message to track down bugs. Should be removed 
-	 *  when the bug is fixed.
+	/**	log a temporary message to track down bugs. Calls to this function 
+	 * should be removed when the bug is fixed.
 	 */
 	static public void debug(String msg){
-		logEvent(new StdLogEvent(LogEvent.DEBUG_TRACE,msg,null,getOrigin()));
+		getInstance().logEvent(new StdLogEvent(LogEvent.DEBUG_TRACE,msg,null,getOrigin()));
 	}
 	/** log normal system state (normally not shown to user)
 	 */
 	static public void traceState(String state){
-		logEvent(new StdLogEvent(LogEvent.STATE_TRACE,state,null,getOrigin()));
+		getInstance().logEvent(new StdLogEvent(LogEvent.STATE_TRACE,state,null,getOrigin()));
 	}
 	/** log expected but unusual system state (normally not shown to user)
 	 */
 	static public void traceUnusualState(String state){
-		logEvent(new StdLogEvent(LogEvent.UNUSUAL_STATE_TRACE,state,null,getOrigin()));
+		getInstance().logEvent(new StdLogEvent(LogEvent.UNUSUAL_STATE_TRACE,state,null,getOrigin()));
 	}
 	/**	log a command to a backend system (e.g. a SQL statement)
 	 */
 	static public void traceBackendCmd(String cmd){
-		logEvent(new StdLogEvent(LogEvent.BACKEND_CMD,cmd,null,getOrigin()));
+		getInstance().logEvent(new StdLogEvent(LogEvent.BACKEND_CMD,cmd,null,getOrigin()));
 	}
 	/** inform user about current system state (e.g. progress information)
 	 */
 	static public void logState(String state){
-		logEvent(new StdLogEvent(LogEvent.STATE,state,null,getOrigin()));
+		getInstance().logEvent(new StdLogEvent(LogEvent.STATE,state,null,getOrigin()));
 	}
 	/** inform user about adaptions taken by the code (e.g. ignoring some supefluous input)
 	 */ 
 	static public void logAdaption(String adaption){
-		logEvent(new StdLogEvent(LogEvent.ADAPTION,adaption,null,getOrigin()));
+		getInstance().logEvent(new StdLogEvent(LogEvent.ADAPTION,adaption,null,getOrigin()));
 	}
 	/** errors (program errors or input errors)
 	 */
 	static public void logError(String errmsg){
-		logEvent(new StdLogEvent(LogEvent.ERROR,errmsg,null,getOrigin()));
+		getInstance().logEvent(new StdLogEvent(LogEvent.ERROR,errmsg,null,getOrigin()));
 	}
 	/** errors (program errors or input errors)
 	 */
 	static public void logError(String errmsg,Throwable ex){
-		logEvent(new StdLogEvent(LogEvent.ERROR,errmsg,ex,getOrigin()));
+		getInstance().logEvent(new StdLogEvent(LogEvent.ERROR,errmsg,ex,getOrigin()));
 	}
 	/** errors (program errors or input errors)
 	 */
 	static public void logError(Throwable ex){
-		logEvent(new StdLogEvent(LogEvent.ERROR,null,ex,getOrigin()));
+		getInstance().logEvent(new StdLogEvent(LogEvent.ERROR,null,ex,getOrigin()));
 	}
+	/** gets the origin of a call to logError() functions.
+	 */
 	static private StackTraceElement getOrigin(){
 		Throwable tr=new Throwable();
 		StackTraceElement stack[]=tr.getStackTrace();
