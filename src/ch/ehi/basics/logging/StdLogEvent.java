@@ -19,7 +19,7 @@ package ch.ehi.basics.logging;
 
 /**
  * @author ce
- * @version $Revision: 1.1 $ $Date: 2005-02-08 11:55:13 $
+ * @version $Revision: 1.2 $ $Date: 2005-03-08 07:54:49 $
  */
 public class StdLogEvent implements LogEvent {
 	private int kind=0;
@@ -28,9 +28,6 @@ public class StdLogEvent implements LogEvent {
 	private StackTraceElement origin=null;
 	public StdLogEvent(int kind,String msg,Throwable ex,StackTraceElement origin){
 		this.kind=kind;
-		if(msg==null){
-			throw new IllegalArgumentException("error message shouldn't be null");
-		}
 		this.msg=msg;
 		this.ex=ex;
 		this.origin=origin;
