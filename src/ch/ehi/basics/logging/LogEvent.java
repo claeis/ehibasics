@@ -19,7 +19,7 @@ package ch.ehi.basics.logging;
 
 /**
  * @author ce
- * @version $Revision: 1.1 $ $Date: 2005-02-08 11:55:13 $
+ * @version $Revision: 1.2 $ $Date: 2005-02-21 13:08:30 $
  */
 public interface LogEvent {
 	/**	temporary messages to track down bugs. Should be removed 
@@ -51,15 +51,17 @@ public interface LogEvent {
 	 */
 	public int getEventKind();
 	/** gets the message to log of this event.
-	 * @return message to log. Should not return null or empty message.
+	 * @return message to log or null.  
+	 * Message or Exception should be defined.
 	 */
 	public String getEventMsg();
 	/** gets the exception attached to this event.
-	 * @return the attached exception or null if there is no exception attached.
+	 * @return the attached exception or null if there is no exception attached.  
+	 * Message or Exception should be defined.
 	 */
 	public Throwable getException();
 	/** gets the source of this event.
-	 * @return source of this event or null. (e.g. MyClass.mash(MyClass.java:9))
+	 * @return source of this event or null. (e.g. MyClass.mash(MyClass.java:9)).
 	 */
 	public StackTraceElement getOrigin();
 }
