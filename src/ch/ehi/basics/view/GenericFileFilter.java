@@ -3,11 +3,11 @@ package ch.ehi.basics.view;
 import java.io.File;
 import javax.swing.filechooser.*;
 
-/**
+/** Example usage:
  *    JFileChooser fc = new JFileChooser();
  *    fc.addChoosableFileFilter(new GenericFileFilter("INTERLIS models (*.ili)","ili"));
  */
-public class GenericFileFilter extends FileFilter {
+public class GenericFileFilter extends FileFilter implements java.io.FileFilter {
 	private static java.util.ResourceBundle resources = ch.ehi.basics.i18n.ResourceBundle.getBundle(GenericFileFilter.class);
     private String description;
     private String extension;
@@ -15,7 +15,7 @@ public class GenericFileFilter extends FileFilter {
       this.description=description;
       this.extension=extension;
     }
-    /** Accept all directories and all files with given extension
+    /** Accept all directories, with or without extension, and all files with given extension
      *
      */
     public boolean accept(File f) {
