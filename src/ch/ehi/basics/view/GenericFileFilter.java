@@ -9,6 +9,7 @@ import javax.swing.filechooser.*;
  *    fc.addChoosableFileFilter(new GenericFileFilter("INTERLIS models (*.ili)","ili"));
  */
 public class GenericFileFilter extends FileFilter {
+	private static java.util.ResourceBundle resources = ch.ehi.basics.i18n.ResourceBundle.getBundle(GenericFileFilter.class);
     private String description;
     private String extension;
     public GenericFileFilter(String description,String extension){
@@ -34,14 +35,42 @@ public class GenericFileFilter extends FileFilter {
 
         return false;
     }
-
+/**
+ * @return specific File-Filter.
+ */
+public static GenericFileFilter createCsvFilter() {
+	return new GenericFileFilter(resources.getString("CICsvFilter"), "csv");//$NON-NLS-2$ //$NON-NLS-1$
+}
+/**
+ * @return specific File-Filter.
+ */
+public static GenericFileFilter createHtmlFilter() {
+	return new GenericFileFilter(resources.getString("CIHtmlFilter"), "html");//$NON-NLS-2$ //$NON-NLS-1$
+}
+/**
+ * @return specific File-Filter.
+ */
+public static GenericFileFilter createSqlFilter() {
+	return new GenericFileFilter(resources.getString("CISqlFilter"), "sql");//$NON-NLS-2$ //$NON-NLS-1$
+}
+/**
+ * @return specific File-Filter.
+ */
+public static GenericFileFilter createXmlFilter() {
+	return new GenericFileFilter(resources.getString("CIXmlFilter"), "xml");//$NON-NLS-2$ //$NON-NLS-1$
+}
+/**
+ * @return specific File-Filter.
+ */
+public static GenericFileFilter createXmlSchemaFilter() {
+	return new GenericFileFilter(resources.getString("CIXsdFilter"), "xsd");
+}
     /** The description of this filter
      *
      */
     public String getDescription() {
         return description;
     }
-
     /** The file extension used by this filter
      *
      */
