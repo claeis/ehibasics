@@ -45,4 +45,14 @@ public static javax.swing.ImageIcon getImageIcon(Class aClass, String imageFileN
     resourceName.insert(className.lastIndexOf('.'), "." + RESOURCES_DIRECTORY);
     return resourceName.toString();
   }
+  /** transform a class into a corresponding package path.
+   * @param 'ch.ehi.Text'
+   * @returns '/ch/ehi'
+   */
+  public static String class2packagePath(Class aClass){
+	String className = aClass.getName();
+	int index = className.lastIndexOf('.');
+	String file = "/"+className.substring(0, index).replace('.', '/');	
+	return file;
+  }
 }
