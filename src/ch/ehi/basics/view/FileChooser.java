@@ -117,6 +117,54 @@ public class FileChooser extends JFileChooser {
 	// let OK action continue
 	super.approveSelection();
    }
+   /** convenience function to approve an output filename.
+    * if(FileChooser.approveFile(outfile,MainFrame,"applicationName")){
+    *   write to file outfile
+    * }
+    * @param filename name of output file
+    * @param parent parent dialog or frame
+    * @param dialogTitle title of appoval/error dialogs
+    * @return true if the file doesn't exist or the user approved it's overwriting.
+    */
+   public static boolean approveFile(String filename,java.awt.Component parent,String dialogTitle)
+   {
+   	File selectedFile=new File(filename);
+	// file already exists?
+	if(!selectedFile.exists()) {
+		// file doesnt exist
+		return true;
+	}else{
+		// selected file not writeable?
+		if (!selectedFile.canWrite()) {
+			// Post an error message and return
+			JOptionPane.showMessageDialog(
+				parent,
+				rsrc.getString("CTfileisntwriteable"),
+				dialogTitle,
+				JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		// let user approve to overwrite file
+		// Post an option dialog
+		int response =
+			JOptionPane.showConfirmDialog(
+				parent,
+				rsrc.getString("CTfileexists"),
+				dialogTitle,
+				JOptionPane.YES_NO_CANCEL_OPTION,
+				JOptionPane.QUESTION_MESSAGE);
+	
+		if (response == JOptionPane.CLOSED_OPTION
+			|| response == JOptionPane.CANCEL_OPTION) {
+			return false;
+		} else if (response == JOptionPane.YES_OPTION) {
+			// ok, overwrite
+			return true;
+		} else {
+			return false;
+		}
+	}
+   }
    private boolean isOutputDirDialog=false;
    public int showOutputDirDialog(java.awt.Component parent)
    {
