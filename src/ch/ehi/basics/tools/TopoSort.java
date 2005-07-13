@@ -3,6 +3,7 @@ package ch.ehi.basics.tools;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
 
 public class TopoSort {
 	//typedef T value_type;
@@ -37,6 +38,22 @@ public void addcond(Object j, Object k)
   return;
 }
 
+public void addAll(TopoSort src)
+{
+	// copy ts_count
+	Iterator it=src.ts_count.keySet().iterator();
+	while(it.hasNext()){
+		Object o1=it.next();
+		ts_count.put(o1,src.ts_count.get(o1));
+	}
+	// copy ts_succ
+	it=src.ts_succ.keySet().iterator();
+	while(it.hasNext()){
+		Object o1=it.next();
+		ArrayList srcsuccv=(ArrayList)src.ts_succ.get(o1);
+		ts_succ.put(o1,new ArrayList(srcsuccv));
+	}
+}
 public boolean sort()
 {
 
