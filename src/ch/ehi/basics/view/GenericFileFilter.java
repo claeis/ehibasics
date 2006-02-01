@@ -35,30 +35,42 @@ public class GenericFileFilter extends FileFilter implements java.io.FileFilter 
         return false;
     }
 /**
+ * Comma Separated Values (ASCII).
  * @return specific File-Filter.
  */
 public static GenericFileFilter createCsvFilter() {
 	return new GenericFileFilter(resources.getString("CICsvFilter"), "csv");//$NON-NLS-2$ //$NON-NLS-1$
 }
 /**
+ * MS Excel Spreadsheet (binary).
+ * @return specific File-Filter.
+ */
+public static GenericFileFilter createXlsFilter() {
+    return new GenericFileFilter("MS Excel"/*resources.getString("CICsvFilter")*/, "xls");//$NON-NLS-2$ //$NON-NLS-1$
+}
+/**
+ * HTML (ASCII).
  * @return specific File-Filter.
  */
 public static GenericFileFilter createHtmlFilter() {
 	return new GenericFileFilter(resources.getString("CIHtmlFilter"), "html");//$NON-NLS-2$ //$NON-NLS-1$
 }
 /**
+ * SQL (ASCII).
  * @return specific File-Filter.
  */
 public static GenericFileFilter createSqlFilter() {
 	return new GenericFileFilter(resources.getString("CISqlFilter"), "sql");//$NON-NLS-2$ //$NON-NLS-1$
 }
 /**
+ * XML (ASCII).
  * @return specific File-Filter.
  */
 public static GenericFileFilter createXmlFilter() {
 	return new GenericFileFilter(resources.getString("CIXmlFilter"), "xml");//$NON-NLS-2$ //$NON-NLS-1$
 }
 /**
+ * XSD (ASCII).
  * @return specific File-Filter.
  */
 public static GenericFileFilter createXmlSchemaFilter() {
