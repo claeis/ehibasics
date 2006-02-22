@@ -23,7 +23,7 @@ import java.lang.reflect.InvocationTargetException;
 
 /** A logging listener that just logs to System.err.
  * @author ce
- * @version $Revision: 1.2 $ $Date: 2005-02-21 13:11:14 $
+ * @version $Revision: 1.3 $ $Date: 2006-02-22 10:04:27 $
  */
 public class StdListener implements LogListener {
 	static private StdListener instance=null; 
@@ -123,7 +123,7 @@ public class StdListener implements LogListener {
 		}
 		Throwable ex2=ex.getCause();
 		if(ex2!=null){
-			logThrowable(out,ind+"  ",ex,doStacktrace);
+			logThrowable(out,ind+"  ",ex2,doStacktrace);
 		}
 		if(ex instanceof java.sql.SQLException){
 			java.sql.SQLException exTarget=(java.sql.SQLException)ex;
