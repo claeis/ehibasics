@@ -20,7 +20,7 @@ package ch.ehi.basics.logging;
 /** Single point of access to the logging system. 
  * It is a usage error, to have no registered listeners. 
  * @author ce
- * @version $Revision: 1.3 $ $Date: 2005-02-21 17:03:33 $
+ * @version $Revision: 1.4 $ $Date: 2006-04-21 14:46:43 $
  */
 public class EhiLogger {
 	static private EhiLogger instance=null; 
@@ -29,6 +29,10 @@ public class EhiLogger {
 	 */
 	public void addListener(LogListener logListener)
 	{
+		if(logListener==null){
+		  // ignore usage error
+		  return;
+		}
 	  getInstance().logListenerv.add(logListener);
 	  return;
 	}
@@ -36,8 +40,10 @@ public class EhiLogger {
 	 */
 	public void removeListener(LogListener logListener)
 	{
+		// null or unknown logListener?
 		if(logListener==null || !getInstance().logListenerv.contains(logListener)){
-		  throw new java.lang.IllegalArgumentException("cannot remove null or unknown logListener");
+		  // ignore usage error
+		  return;
 		}
 		getInstance().logListenerv.remove(logListener);
 		if(getInstance().logListenerv.size()==0){
