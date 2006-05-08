@@ -89,16 +89,22 @@ public static GenericFileFilter createXmlSchemaFilter() {
         return extension;
     }
     /** Get the extension of a file.
-     *
+     * @return e.g. "xml"
      */
     public static String getFileExtension(File f) {
-        String ext = null;
         String s = f.getName();
-        int i = s.lastIndexOf('.');
-
-        if (i >= 0 &&  i < s.length()) {
-            ext = s.substring(i+1);
-        }
-        return ext;
+        return getFileExtension(s);
     }
+	/** Get the extension of a file.
+	 * @return e.g. "xml"
+	 */
+	public static String getFileExtension(String s) {
+		String ext = null;
+		int i = s.lastIndexOf('.');
+
+		if (i >= 0 &&  i < s.length()) {
+			ext = s.substring(i+1);
+		}
+		return ext;
+	}
 }
