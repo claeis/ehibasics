@@ -20,7 +20,7 @@ package ch.ehi.basics.logging;
 /** Single point of access to the logging system. 
  * It is a usage error, to have no registered listeners. 
  * @author ce
- * @version $Revision: 1.4 $ $Date: 2006-04-21 14:46:43 $
+ * @version $Revision: 1.5 $ $Date: 2006-06-21 12:55:44 $
  */
 public class EhiLogger {
 	static private EhiLogger instance=null; 
@@ -108,11 +108,21 @@ public class EhiLogger {
 		  }
 		}
 	}
-	/**	log a temporary message to track down bugs. Calls to this function 
+	/**	temporarly log a message to track down bugs. Calls to this function 
 	 * should be removed when the bug is fixed.
 	 */
 	static public void debug(String msg){
 		getInstance().logEvent(new StdLogEvent(LogEvent.DEBUG_TRACE,msg,null,getOrigin()));
+	}
+	/**	temporarly log a stack trace to track down bugs. Calls to this function 
+	 * should be removed when the bug is fixed.
+	 */
+	static public void debugStackTrace(){
+		Throwable tr=new Throwable();
+		StackTraceElement stack[]=tr.getStackTrace();
+		for(int i=1;i<stack.length;i++){
+			debug(stack[i].toString()); 
+		}
 	}
 	/** log normal system state (normally not shown to user)
 	 */
