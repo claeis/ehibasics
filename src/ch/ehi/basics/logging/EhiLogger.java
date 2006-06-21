@@ -20,7 +20,7 @@ package ch.ehi.basics.logging;
 /** Single point of access to the logging system. 
  * It is a usage error, to have no registered listeners. 
  * @author ce
- * @version $Revision: 1.5 $ $Date: 2006-06-21 12:55:44 $
+ * @version $Revision: 1.6 $ $Date: 2006-06-21 13:13:30 $
  */
 public class EhiLogger {
 	static private EhiLogger instance=null; 
@@ -177,5 +177,28 @@ public class EhiLogger {
 			return st;
 		}
 		return null;
+	}
+	/** converts an event kind to a String.
+	 */
+	static public String kindToString(int eventKind)
+	{
+		switch(eventKind){
+			case LogEvent.DEBUG_TRACE:
+				return "DEBUG_TRACE";
+			case LogEvent.STATE_TRACE:
+				return "STATE_TRACE";
+			case LogEvent.UNUSUAL_STATE_TRACE:
+				return "UNUSUAL_STATE_TRACE";
+			case LogEvent.BACKEND_CMD:
+				return "BACKEND_CMD";
+			case LogEvent.STATE:
+				return "STATE";
+			case LogEvent.ADAPTION:
+				return "ADAPTION";
+			case LogEvent.ERROR:
+				return "ERROR";
+			default:
+				throw new IllegalArgumentException("illegal event kind");
+		}
 	}
 }
