@@ -19,13 +19,21 @@ package ch.ehi.basics.logging;
 
 /**
  * @author ce
- * @version $Revision: 1.2 $ $Date: 2005-03-08 07:54:49 $
+ * @version $Revision: 1.3 $ $Date: 2006-06-21 12:57:59 $
  */
 public class StdLogEvent implements LogEvent {
 	private int kind=0;
 	private String msg=null;
 	private Throwable ex=null;
 	private StackTraceElement origin=null;
+	private int customLevel=LEVEL_UNDEFINED;
+	public StdLogEvent(int kind,String msg,Throwable ex,StackTraceElement origin,int customLevel){
+		this.kind=kind;
+		this.msg=msg;
+		this.ex=ex;
+		this.origin=origin;
+		this.customLevel=customLevel;
+	}
 	public StdLogEvent(int kind,String msg,Throwable ex,StackTraceElement origin){
 		this.kind=kind;
 		this.msg=msg;
@@ -43,5 +51,9 @@ public class StdLogEvent implements LogEvent {
 	}
 	public StackTraceElement getOrigin(){
 		return origin;
+	}
+	public int getCustomLevel()
+	{
+		return customLevel;
 	}
 }

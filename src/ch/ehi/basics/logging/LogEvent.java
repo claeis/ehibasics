@@ -19,7 +19,7 @@ package ch.ehi.basics.logging;
 
 /**
  * @author ce
- * @version $Revision: 1.2 $ $Date: 2005-02-21 13:08:30 $
+ * @version $Revision: 1.3 $ $Date: 2006-06-21 12:57:59 $
  */
 public interface LogEvent {
 	/**	temporary messages to track down bugs. Should be removed 
@@ -64,4 +64,13 @@ public interface LogEvent {
 	 * @return source of this event or null. (e.g. MyClass.mash(MyClass.java:9)).
 	 */
 	public StackTraceElement getOrigin();
+	/** gets the level of this event.
+	 * The meaning of the different levels is completly 
+	 * defined by the user of this package.
+	 * @return level of event
+	 */
+	public int getCustomLevel();
+	/** the value for events without a custom level. 
+	 */
+	static final int LEVEL_UNDEFINED=0;
 }
