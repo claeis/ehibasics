@@ -19,8 +19,11 @@ package ch.ehi.basics.logging;
 
 /** Single point of access to the logging system. 
  * It is a usage error, to have no registered listeners. 
+ * Initially all events are written to System.err. To remove 
+ * this output, remove the StdListener after you added your own listener by
+ * <code>EhiLogger.getInstance().removeListener(ch.ehi.basics.logging.StdListener.getInstance());</code> 
  * @author ce
- * @version $Revision: 1.6 $ $Date: 2006-06-21 13:13:30 $
+ * @version $Revision: 1.7 $ $Date: 2006-06-21 13:44:35 $
  */
 public class EhiLogger {
 	static private EhiLogger instance=null; 
@@ -65,6 +68,17 @@ public class EhiLogger {
 	}
 	private boolean filterTrace=true;
 	/** enables/disables filtering of trace events.
+	 *  The filtering is done on the kind of event. 
+	 *  DEBUG_TRACE, STATE_TRACE, UNUSUAL_STATE_TRACE, BACKEND_CMD
+	 *  are considered as trace events.
+	 *  The indent of this filtering is to reduce calls 
+	 *  to listeners. A user oriented filtering should be 
+	 *  implemented in listeners.
+	 * 	@see LogEvent#DEBUG_TRACE
+	 *	@see LogEvent#STATE_TRACE
+	 *	@see LogEvent#UNUSUAL_STATE_TRACE
+	 *	@see LogEvent#BACKEND_CMD
+	 *
 	 */
 	public void setTraceFiler(boolean enableFilter){
 		filterTrace=enableFilter;

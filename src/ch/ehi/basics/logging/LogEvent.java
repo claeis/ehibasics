@@ -17,9 +17,9 @@
  */
 package ch.ehi.basics.logging;
 
-/**
+/** The interface that each log event should implement.
  * @author ce
- * @version $Revision: 1.3 $ $Date: 2006-06-21 12:57:59 $
+ * @version $Revision: 1.4 $ $Date: 2006-06-21 13:44:35 $
  */
 public interface LogEvent {
 	/**	temporary messages to track down bugs. Should be removed 
@@ -68,6 +68,7 @@ public interface LogEvent {
 	 * The meaning of the different levels is completly 
 	 * defined by the user of this package.
 	 * @return level of event
+	 * @see #LEVEL_UNDEFINED
 	 */
 	public int getCustomLevel();
 	/** the value for events without a custom level. 

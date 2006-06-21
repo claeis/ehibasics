@@ -17,12 +17,13 @@
  */
 package ch.ehi.basics.logging;
 
-/**
+/** The interface that each listener to EhiLogger should implement.
  * @author ce
- * @version $Revision: 1.1 $ $Date: 2005-02-08 11:55:13 $
+ * @version $Revision: 1.2 $ $Date: 2006-06-21 13:44:35 $
+ * @see EhiLogger
  */
 public interface LogListener {
-	/** logs a logging event. called by Logger.
+	/** logs a logging event. called by EhiLogger.
 	 * @param event the event to log.
 	 */
 	public void logEvent(LogEvent event);
