@@ -23,7 +23,7 @@ import java.lang.reflect.InvocationTargetException;
 
 /** A logging listener that just logs to System.err.
  * @author ce
- * @version $Revision: 1.4 $ $Date: 2006-05-03 06:36:44 $
+ * @version $Revision: 1.5 $ $Date: 2006-06-21 13:00:18 $
  */
 public class StdListener extends AbstractStdListener {
 	static private StdListener instance=null; 
@@ -39,7 +39,7 @@ public class StdListener extends AbstractStdListener {
 	
 	private StdListener(){
 	}
-	public void outputMsgLine(String msg) {
+	public void outputMsgLine(int kind,int level,String msg) {
 		if(msg.endsWith("\n")){
 			System.err.print(msg);
 		}else{
