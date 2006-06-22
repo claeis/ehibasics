@@ -23,7 +23,7 @@ package ch.ehi.basics.logging;
  * this output, remove the StdListener after you added your own listener by
  * <code>EhiLogger.getInstance().removeListener(ch.ehi.basics.logging.StdListener.getInstance());</code> 
  * @author ce
- * @version $Revision: 1.7 $ $Date: 2006-06-21 13:44:35 $
+ * @version $Revision: 1.8 $ $Date: 2006-06-22 06:44:24 $
  */
 public class EhiLogger {
 	static private EhiLogger instance=null; 
@@ -128,6 +128,9 @@ public class EhiLogger {
 	static public void debug(String msg){
 		getInstance().logEvent(new StdLogEvent(LogEvent.DEBUG_TRACE,msg,null,getOrigin()));
 	}
+	static public void debug(String msg,int level){
+		getInstance().logEvent(new StdLogEvent(LogEvent.DEBUG_TRACE,msg,null,getOrigin(),level));
+	}
 	/**	temporarly log a stack trace to track down bugs. Calls to this function 
 	 * should be removed when the bug is fixed.
 	 */
@@ -138,45 +141,76 @@ public class EhiLogger {
 			debug(stack[i].toString()); 
 		}
 	}
+	static public void debugStackTrace(int level){
+		Throwable tr=new Throwable();
+		StackTraceElement stack[]=tr.getStackTrace();
+		for(int i=1;i<stack.length;i++){
+			debug(stack[i].toString(),level); 
+		}
+	}
 	/** log normal system state (normally not shown to user)
 	 */
 	static public void traceState(String state){
 		getInstance().logEvent(new StdLogEvent(LogEvent.STATE_TRACE,state,null,getOrigin()));
+	}
+	static public void traceState(String state,int level){
+		getInstance().logEvent(new StdLogEvent(LogEvent.STATE_TRACE,state,null,getOrigin(),level));
 	}
 	/** log expected but unusual system state (normally not shown to user)
 	 */
 	static public void traceUnusualState(String state){
 		getInstance().logEvent(new StdLogEvent(LogEvent.UNUSUAL_STATE_TRACE,state,null,getOrigin()));
 	}
+	static public void traceUnusualState(String state,int level){
+		getInstance().logEvent(new StdLogEvent(LogEvent.UNUSUAL_STATE_TRACE,state,null,getOrigin(),level));
+	}
 	/**	log a command to a backend system (e.g. a SQL statement)
 	 */
 	static public void traceBackendCmd(String cmd){
 		getInstance().logEvent(new StdLogEvent(LogEvent.BACKEND_CMD,cmd,null,getOrigin()));
+	}
+	static public void traceBackendCmd(String cmd,int level){
+		getInstance().logEvent(new StdLogEvent(LogEvent.BACKEND_CMD,cmd,null,getOrigin(),level));
 	}
 	/** inform user about current system state (e.g. progress information)
 	 */
 	static public void logState(String state){
 		getInstance().logEvent(new StdLogEvent(LogEvent.STATE,state,null,getOrigin()));
 	}
+	static public void logState(String state,int level){
+		getInstance().logEvent(new StdLogEvent(LogEvent.STATE,state,null,getOrigin(),level));
+	}
 	/** inform user about adaptions taken by the code (e.g. ignoring some supefluous input)
 	 */ 
 	static public void logAdaption(String adaption){
 		getInstance().logEvent(new StdLogEvent(LogEvent.ADAPTION,adaption,null,getOrigin()));
+	}
+	static public void logAdaption(String adaption,int level){
+		getInstance().logEvent(new StdLogEvent(LogEvent.ADAPTION,adaption,null,getOrigin(),level));
 	}
 	/** errors (program errors or input errors)
 	 */
 	static public void logError(String errmsg){
 		getInstance().logEvent(new StdLogEvent(LogEvent.ERROR,errmsg,null,getOrigin()));
 	}
+	static public void logError(String errmsg,int level){
+		getInstance().logEvent(new StdLogEvent(LogEvent.ERROR,errmsg,null,getOrigin(),level));
+	}
 	/** errors (program errors or input errors)
 	 */
 	static public void logError(String errmsg,Throwable ex){
 		getInstance().logEvent(new StdLogEvent(LogEvent.ERROR,errmsg,ex,getOrigin()));
 	}
+	static public void logError(String errmsg,Throwable ex,int level){
+		getInstance().logEvent(new StdLogEvent(LogEvent.ERROR,errmsg,ex,getOrigin(),level));
+	}
 	/** errors (program errors or input errors)
 	 */
 	static public void logError(Throwable ex){
 		getInstance().logEvent(new StdLogEvent(LogEvent.ERROR,null,ex,getOrigin()));
+	}
+	static public void logError(Throwable ex,int level){
+		getInstance().logEvent(new StdLogEvent(LogEvent.ERROR,null,ex,getOrigin(),level));
 	}
 	/** gets the origin of a call to logError() functions.
 	 */
