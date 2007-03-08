@@ -19,7 +19,7 @@ package ch.ehi.basics.logging;
 
 /**
  * @author ce
- * @version $Revision: 1.3 $ $Date: 2006-06-21 12:57:59 $
+ * @version $Revision: 1.4 $ $Date: 2007-03-08 10:57:59 $
  */
 public class StdLogEvent implements LogEvent {
 	private int kind=0;
@@ -29,6 +29,12 @@ public class StdLogEvent implements LogEvent {
 	private int customLevel=LEVEL_UNDEFINED;
 	public StdLogEvent(int kind,String msg,Throwable ex,StackTraceElement origin,int customLevel){
 		this.kind=kind;
+		if(msg!=null){
+			msg=msg.trim();
+			if(msg.length()==0){
+				msg=null;
+			}
+		}
 		this.msg=msg;
 		this.ex=ex;
 		this.origin=origin;
@@ -36,6 +42,12 @@ public class StdLogEvent implements LogEvent {
 	}
 	public StdLogEvent(int kind,String msg,Throwable ex,StackTraceElement origin){
 		this.kind=kind;
+		if(msg!=null){
+			msg=msg.trim();
+			if(msg.length()==0){
+				msg=null;
+			}
+		}
 		this.msg=msg;
 		this.ex=ex;
 		this.origin=origin;

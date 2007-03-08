@@ -25,7 +25,7 @@ import java.lang.reflect.InvocationTargetException;
  * To implement a listener, the programmer needs only to extend this 
  * class and provide an implementation for the outputMsg() method.
  * @author ce
- * @version $Revision: 1.2 $ $Date: 2006-06-21 13:00:18 $
+ * @version $Revision: 1.3 $ $Date: 2007-03-08 10:58:55 $
  */
 public abstract class AbstractStdListener implements LogListener {
 	private boolean errors=false;
@@ -78,6 +78,12 @@ public abstract class AbstractStdListener implements LogListener {
 	public static ArrayList formatOutput(LogEvent event,boolean doOrigin,boolean doStacktrace){
 		ArrayList out=new ArrayList();
 		String msg=event.getEventMsg();
+		if(msg!=null){
+			msg=msg.trim();
+			if(msg.length()==0){
+				msg=null;
+			}
+		}
 		String sep="";
 		if(msg!=null){
 			if(doOrigin){
@@ -104,6 +110,12 @@ public abstract class AbstractStdListener implements LogListener {
 	}
 	private static void logThrowable(ArrayList out,String ind,Throwable ex,boolean doStacktrace){
 		String msg=ex.getLocalizedMessage();
+		if(msg!=null){
+			msg=msg.trim();
+			if(msg.length()==0){
+				msg=null;
+			}
+		}
 		if(msg==null){
 			msg=ex.getClass().getName();
 		}
