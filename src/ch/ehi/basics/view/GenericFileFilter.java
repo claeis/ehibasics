@@ -95,7 +95,7 @@ public static GenericFileFilter createXmlSchemaFilter() {
         String s = f.getName();
         return getFileExtension(s);
     }
-	/** Get the extension of a file.
+	/** Get the extension of a file name.
 	 * @return e.g. "xml"
 	 */
 	public static String getFileExtension(String s) {
@@ -106,5 +106,24 @@ public static GenericFileFilter createXmlSchemaFilter() {
 			ext = s.substring(i+1);
 		}
 		return ext;
+	}
+	/** Get the filename without extension.
+	 * @return e.g. "export"
+	 */
+	public static String stripFileExtension(String s) {
+		String name = s;
+		int i = s.lastIndexOf('.');
+
+		if (i >= 0 &&  i < s.length()) {
+			name = s.substring(0,i);
+		}
+		return name;
+	}
+	/** Get the filename without extension.
+	 * @return e.g. "export"
+	 */
+	public static String stripFileExtension(File f) {
+		String s = f.getName();
+		return stripFileExtension(s);
 	}
 }
