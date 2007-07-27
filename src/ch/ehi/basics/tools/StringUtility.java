@@ -20,4 +20,14 @@ public class StringUtility {
     }
     return buf.toString();
   }
+	/** removes leading and trailing white space and returns null if nothing left.
+	 */
+	public static String purge(String value){
+		if(value==null)return null;
+		String ret=value.trim();
+		if(ret.length()==0){
+			return null;
+		}
+		return ret;
+	}
 }
