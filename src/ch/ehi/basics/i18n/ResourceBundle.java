@@ -18,7 +18,7 @@ import java.net.URL;
 /**
  * Alternative ResourceBundle.
  * @author ce
- * @version $Revision: 1.3 $ $Date: 2005-06-10 16:07:21 $
+ * @version $Revision: 1.4 $ $Date: 2007-08-02 12:25:10 $
  */
 public class ResourceBundle {
 	private final static String RESOURCES_DIRECTORY = "resources";
@@ -85,6 +85,8 @@ public static URL getURL(Class aClass, String fileName) {
   /** transform a class into a corresponding package path.
    * @param 'ch.ehi.Text'
    * @returns '/ch/ehi'
+   * @deprecated  This function gives the wrong name to access
+   * a resource via class loader. Use {@link #class2qpackageName()}.
    */
   public static String class2packagePath(Class aClass){
 	String className = aClass.getName();
@@ -92,4 +94,15 @@ public static URL getURL(Class aClass, String fileName) {
 	String file = "/"+className.substring(0, index).replace('.', '/');	
 	return file;
   }
+  /** transform a class into a corresponding qualified package name.
+   * @param 'ch.ehi.Text'
+   * @returns 'ch.ehi'
+   */
+  public static String class2qpackageName(Class aClass){
+		String className = aClass.getName();
+		int index = className.lastIndexOf('.');
+		String file = className.substring(0, index);	
+		return file;
+	  }
+
 }
