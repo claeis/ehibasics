@@ -21,9 +21,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.lang.reflect.InvocationTargetException;
 
-/** A logging listener that just logs to System.err.
+/** Default logging listener that just logs to System.err.
  * @author ce
- * @version $Revision: 1.5 $ $Date: 2006-06-21 13:00:18 $
+ * @version $Revision: 1.6 $ $Date: 2007-09-11 09:17:50 $
  */
 public class StdListener extends AbstractStdListener {
 	static private StdListener instance=null; 
@@ -39,12 +39,25 @@ public class StdListener extends AbstractStdListener {
 	
 	private StdListener(){
 	}
+	private boolean infoSuppressed=false;
 	public void outputMsgLine(int kind,int level,String msg) {
-		if(msg.endsWith("\n")){
-			System.err.print(msg);
-		}else{
-			System.err.println(msg);
+		if(!infoSuppressed || kind==LogEvent.ERROR){
+			if(msg.endsWith("\n")){
+				System.err.print(msg);
+			}else{
+				System.err.println(msg);
+			}
 		}
+	}
+
+	/** suppress all messages except errors.
+	 */
+	public boolean isInfoSuppressed() {
+		return infoSuppressed;
+	}
+
+	public void setInfoSuppressed(boolean infoSuppressed) {
+		this.infoSuppressed = infoSuppressed;
 	}
 
 }
