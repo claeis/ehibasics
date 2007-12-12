@@ -1,0 +1,13 @@
+<body>
+<p>The main goal of the EhiLogger module is to report error and other similar messages.</p>
+<p>In a commandline program error messages are normally written to the standard error file handle. In a program with a graphical user interface error messages are expected by the user to appear somewhere in the programs GUI. Yet different in an operating system service, where error messages are normally written to a message reporting facility of the operating system. If you have to write a library that is to be used in all three before mentioned use cases, you have to decouple the error reporting of the library from the reporting facility to be used by the application that is using your library. This decoupling is the goal of the EhiLogger module.</p>
+<p>The EhiLogger class offers a single point for reporting messages (by implementing a singleton). To output the messages an object implementing the LogListener interface has to be registered into the EhiLogger object.</p>
+<p>To report an error message, simply call EhiLogger.logError().</p>
+<pre><code>
+try{
+  doSomething();
+}catch(Exception ex){
+  EhiLogger.logError("failed to do something",ex);
+}
+</code></pre>
+</body>

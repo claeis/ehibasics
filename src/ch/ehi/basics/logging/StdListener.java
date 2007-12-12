@@ -23,9 +23,9 @@ import java.lang.reflect.InvocationTargetException;
 
 /** Default logging listener that just logs to System.err.
  * @author ce
- * @version $Revision: 1.6 $ $Date: 2007-09-11 09:17:50 $
+ * @version $Revision: 1.7 $ $Date: 2007-12-12 09:52:02 $
  */
-public class StdListener extends AbstractStdListener {
+public class StdListener extends AbstractFilteringListener {
 	static private StdListener instance=null; 
 	/** get unique instance
 	 */
@@ -51,11 +51,15 @@ public class StdListener extends AbstractStdListener {
 	}
 
 	/** suppress all messages except errors.
+	 * @deprecated
 	 */
 	public boolean isInfoSuppressed() {
 		return infoSuppressed;
 	}
 
+	/**
+	 * @deprecated use skipInfo()
+	 */
 	public void setInfoSuppressed(boolean infoSuppressed) {
 		this.infoSuppressed = infoSuppressed;
 	}

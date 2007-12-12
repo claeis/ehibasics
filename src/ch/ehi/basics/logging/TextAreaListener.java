@@ -19,11 +19,11 @@ package ch.ehi.basics.logging;
 
 import javax.swing.JTextArea;
 
-/**
+/** A logging listener that logs to a JTextArea.
  * @author ce
- * @version $Revision: 1.1 $ $Date: 2007-07-27 15:30:39 $
+ * @version $Revision: 1.2 $ $Date: 2007-12-12 09:52:02 $
  */
-public class TextAreaListener extends ch.ehi.basics.logging.AbstractStdListener {
+public class TextAreaListener extends ch.ehi.basics.logging.AbstractFilteringListener {
 	public void outputMsgLine(int arg0, int arg1, String msg) {
 		if(errOutput!=null){
 			if(msg.endsWith("\n")){
@@ -34,6 +34,8 @@ public class TextAreaListener extends ch.ehi.basics.logging.AbstractStdListener 
 		}
 	}
 	private JTextArea  errOutput=null;
+	/** Defines the output GUI control.
+	 */
 	public void setOutputArea(JTextArea  err)
 	{
 		errOutput=err;

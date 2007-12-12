@@ -25,45 +25,52 @@ import java.io.File;
 
 /** A logging listener that just logs to a file.
  * @author ce
- * @version $Revision: 1.1 $ $Date: 2007-03-08 10:56:08 $
+ * @version $Revision: 1.2 $ $Date: 2007-12-12 09:52:02 $
  */
-public class FileListener implements LogListener {
+public class FileListener extends AbstractFilteringListener {
 	private PrintWriter out=null; 
 	private File file=null;
 	private boolean doTimeStamp=false;
-	public void logEvent(LogEvent event){
-		String stmp="";
-		if(doTimeStamp){
-			stmp=Long.toString(System.currentTimeMillis())+": ";
-		}
-		ArrayList msgv=StdListener.formatOutput(event,true,!EhiLogger.getInstance().getTraceFiler());
-		Iterator msgi=msgv.iterator();
-		while(msgi.hasNext()){
-			if(out==null){
-				try{
-					out=new PrintWriter(new java.io.BufferedWriter(new java.io.FileWriter(file)));
-				}catch(java.io.IOException ex){
-					StdListener.getInstance().logEvent(new StdLogEvent(LogEvent.ERROR,null,ex,null));
-				}
-			}
-			String msg=(String)msgi.next();
-			if(msg.endsWith("\n")){
-				out.print(stmp+msg);
-			}else{
-				out.println(stmp+msg);
+	public void outputMsgLine(int arg0, int arg1, String msg) {
+		if(out==null){
+			try{
+				out=new PrintWriter(new java.io.BufferedWriter(new java.io.FileWriter(file)));
+			}catch(java.io.IOException ex){
+				StdListener.getInstance().logEvent(new StdLogEvent(LogEvent.ERROR,null,ex,null));
 			}
 		}
 		if(out!=null){
+			if(msg.endsWith("\n")){
+				out.print(msg);
+			}else{
+				out.println(msg);
+			}
 			out.flush();
 		}
 	}
+	public String getTimestamp(){
+		if(!doTimeStamp){
+			return null;
+		}
+		java.text.DateFormat dfm = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SS");
+		dfm.setTimeZone(java.util.TimeZone.getTimeZone("GMT+0"));
+		// Date a = parseDfm.parse("2007-10-24 20:15:00.00");
+		String stmp=dfm.format(new java.util.Date())+"Z"; // add timesone indicator (Z)
+		return stmp;
+	}
+	/** Creates a new FileListener, doing output to the given file.
+	 */
 	public FileListener(File file1){
 		file=file1;
 	}
+	/** Creates a new FileListener, adding timestamps to each output-line.
+	 */
 	public FileListener(File file1,boolean doTimeStamp1){
 		file=file1;
 		doTimeStamp=doTimeStamp1;
 	}
+	/** Closes the underlying output stream.
+	 */
 	public void close()
 	{
 		if(out!=null){

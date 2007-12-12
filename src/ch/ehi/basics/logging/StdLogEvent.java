@@ -17,9 +17,9 @@
  */
 package ch.ehi.basics.logging;
 
-/**
+/** The standard implementation of a log event.
  * @author ce
- * @version $Revision: 1.4 $ $Date: 2007-03-08 10:57:59 $
+ * @version $Revision: 1.5 $ $Date: 2007-12-12 09:52:02 $
  */
 public class StdLogEvent implements LogEvent {
 	private int kind=0;

@@ -23,7 +23,7 @@ package ch.ehi.basics.logging;
  * this output, remove the StdListener after you added your own listener by
  * <code>EhiLogger.getInstance().removeListener(ch.ehi.basics.logging.StdListener.getInstance());</code> 
  * @author ce
- * @version $Revision: 1.8 $ $Date: 2006-06-22 06:44:24 $
+ * @version $Revision: 1.9 $ $Date: 2007-12-12 09:52:02 $
  */
 public class EhiLogger {
 	static private EhiLogger instance=null; 
@@ -80,12 +80,12 @@ public class EhiLogger {
 	 *	@see LogEvent#BACKEND_CMD
 	 *
 	 */
-	public void setTraceFiler(boolean enableFilter){
+	public void setTraceFilter(boolean enableFilter){
 		filterTrace=enableFilter;
 	}
 	/** gets the current filtering state.
 	 */
-	public boolean getTraceFiler(){
+	public boolean getTraceFilter(){
 		return filterTrace;
 	}
 	/** dispatch any log event.
@@ -128,6 +128,9 @@ public class EhiLogger {
 	static public void debug(String msg){
 		getInstance().logEvent(new StdLogEvent(LogEvent.DEBUG_TRACE,msg,null,getOrigin()));
 	}
+	/**	temporarly log a message to track down bugs. Calls to this function 
+	 * should be removed when the bug is fixed.
+	 */
 	static public void debug(String msg,int level){
 		getInstance().logEvent(new StdLogEvent(LogEvent.DEBUG_TRACE,msg,null,getOrigin(),level));
 	}
@@ -141,6 +144,9 @@ public class EhiLogger {
 			debug(stack[i].toString()); 
 		}
 	}
+	/**	temporarly log a stack trace to track down bugs. Calls to this function 
+	 * should be removed when the bug is fixed.
+	 */
 	static public void debugStackTrace(int level){
 		Throwable tr=new Throwable();
 		StackTraceElement stack[]=tr.getStackTrace();
@@ -153,6 +159,8 @@ public class EhiLogger {
 	static public void traceState(String state){
 		getInstance().logEvent(new StdLogEvent(LogEvent.STATE_TRACE,state,null,getOrigin()));
 	}
+	/** log normal system state (normally not shown to user)
+	 */
 	static public void traceState(String state,int level){
 		getInstance().logEvent(new StdLogEvent(LogEvent.STATE_TRACE,state,null,getOrigin(),level));
 	}
@@ -161,6 +169,8 @@ public class EhiLogger {
 	static public void traceUnusualState(String state){
 		getInstance().logEvent(new StdLogEvent(LogEvent.UNUSUAL_STATE_TRACE,state,null,getOrigin()));
 	}
+	/** log expected but unusual system state (normally not shown to user)
+	 */
 	static public void traceUnusualState(String state,int level){
 		getInstance().logEvent(new StdLogEvent(LogEvent.UNUSUAL_STATE_TRACE,state,null,getOrigin(),level));
 	}
@@ -169,6 +179,8 @@ public class EhiLogger {
 	static public void traceBackendCmd(String cmd){
 		getInstance().logEvent(new StdLogEvent(LogEvent.BACKEND_CMD,cmd,null,getOrigin()));
 	}
+	/**	log a command to a backend system (e.g. a SQL statement)
+	 */
 	static public void traceBackendCmd(String cmd,int level){
 		getInstance().logEvent(new StdLogEvent(LogEvent.BACKEND_CMD,cmd,null,getOrigin(),level));
 	}
@@ -177,6 +189,8 @@ public class EhiLogger {
 	static public void logState(String state){
 		getInstance().logEvent(new StdLogEvent(LogEvent.STATE,state,null,getOrigin()));
 	}
+	/** inform user about current system state (e.g. progress information)
+	 */
 	static public void logState(String state,int level){
 		getInstance().logEvent(new StdLogEvent(LogEvent.STATE,state,null,getOrigin(),level));
 	}
@@ -185,6 +199,8 @@ public class EhiLogger {
 	static public void logAdaption(String adaption){
 		getInstance().logEvent(new StdLogEvent(LogEvent.ADAPTION,adaption,null,getOrigin()));
 	}
+	/** inform user about adaptions taken by the code (e.g. ignoring some supefluous input)
+	 */ 
 	static public void logAdaption(String adaption,int level){
 		getInstance().logEvent(new StdLogEvent(LogEvent.ADAPTION,adaption,null,getOrigin(),level));
 	}
@@ -193,6 +209,8 @@ public class EhiLogger {
 	static public void logError(String errmsg){
 		getInstance().logEvent(new StdLogEvent(LogEvent.ERROR,errmsg,null,getOrigin()));
 	}
+	/** errors (program errors or input errors)
+	 */
 	static public void logError(String errmsg,int level){
 		getInstance().logEvent(new StdLogEvent(LogEvent.ERROR,errmsg,null,getOrigin(),level));
 	}
@@ -201,6 +219,8 @@ public class EhiLogger {
 	static public void logError(String errmsg,Throwable ex){
 		getInstance().logEvent(new StdLogEvent(LogEvent.ERROR,errmsg,ex,getOrigin()));
 	}
+	/** errors (program errors or input errors)
+	 */
 	static public void logError(String errmsg,Throwable ex,int level){
 		getInstance().logEvent(new StdLogEvent(LogEvent.ERROR,errmsg,ex,getOrigin(),level));
 	}
@@ -209,6 +229,8 @@ public class EhiLogger {
 	static public void logError(Throwable ex){
 		getInstance().logEvent(new StdLogEvent(LogEvent.ERROR,null,ex,getOrigin()));
 	}
+	/** errors (program errors or input errors)
+	 */
 	static public void logError(Throwable ex,int level){
 		getInstance().logEvent(new StdLogEvent(LogEvent.ERROR,null,ex,getOrigin(),level));
 	}

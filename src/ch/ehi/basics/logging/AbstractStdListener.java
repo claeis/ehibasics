@@ -24,26 +24,81 @@ import java.lang.reflect.InvocationTargetException;
 /** A skeleton logging listener.
  * To implement a listener, the programmer needs only to extend this 
  * class and provide an implementation for the outputMsg() method.
+ * A second extension point is getMessageTag()/getTimestamp().
+ * A third extension point is skipEvent().
  * @author ce
- * @version $Revision: 1.3 $ $Date: 2007-03-08 10:58:55 $
+ * @version $Revision: 1.4 $ $Date: 2007-12-12 09:52:02 $
  */
 public abstract class AbstractStdListener implements LogListener {
 	private boolean errors=false;
 	public void logEvent(LogEvent event){
+		// is event an error?
 		if(event.getEventKind()==LogEvent.ERROR){
 			errors=true;
 		}
-		ArrayList msgv=formatOutput(event,true,!EhiLogger.getInstance().getTraceFiler());
+		// suppress event?
+		if(skipEvent(event)){
+			return;
+		}
+		// convert event to a list of lines
+		ArrayList msgv=formatOutput(event,true,!EhiLogger.getInstance().getTraceFilter());
+		// do output of lines
+		outputEvent(event,msgv);
+	}
+	/** Extension point to print the list of lines of an event.
+	 * @param event Logging event.
+	 * @param msgv list of lines (String) without tag or timestamp.
+	 */
+	public void outputEvent(LogEvent event,ArrayList msgv)
+	{
+		// get event tag
+		String msgTag=getMessageTag(event);
+		if(msgTag==null){
+			msgTag="";
+		}else{
+			msgTag=msgTag+": ";
+		}
+		
+		// get timetstamp
+		String msgTimestamp=getTimestamp();
+		if(msgTimestamp==null){
+			msgTimestamp="";
+		}else{
+			msgTimestamp=msgTimestamp+": ";
+		}
+		
+		// output all lines
 		Iterator msgi=msgv.iterator();
 		while(msgi.hasNext()){
 			String msg=(String)msgi.next();
-			outputMsgLine(event.getEventKind(),event.getCustomLevel(),msg);
+			outputMsgLine(event.getEventKind(),event.getCustomLevel(),msgTimestamp+msgTag+msg);
 		}
 	}
-	/** print one line of a logging event.
+	/** Extension point to filter events.
+	 * @return true if the event should be suppressed. This listener always returns false.
+	 */
+	public boolean skipEvent(LogEvent event)
+	{
+		return false;
+	}
+	/** Extension point to print one line of a logging event.
 	 */
 	abstract public void outputMsgLine(int eventKind,int eventCustomLevel,String msg);
-	/** helper, to decorate a message with origin information
+	
+	/** Extension point to customize the tagging of a log-event in the output.
+	 * @return tag or null. This listener returns null for errors and "Info" for all others.
+	 */
+	public String getMessageTag(LogEvent event){
+		return event.getEventKind()==LogEvent.ERROR ? null : "Info";
+	}
+	/** Extension point to customize the timestamp of a log-event in the output.
+	 * @return timestamp or null. This listener always returns null.
+	 */
+	public String getTimestamp(){
+		return null;
+	}
+
+	/** Helper, to decorate a message with origin information
 	 * @param st origin
 	 * @param msg message
 	 * @return decorated message
@@ -69,7 +124,7 @@ public abstract class AbstractStdListener implements LogListener {
 		return ret.toString();
 		
 	}
-	/** helper, to format an event into list of output messages.
+	/** Helper, to format an event into a list of output messages.
 	 * @param event
 	 * @param doOrigin add origin information to trace messages
 	 * @param doStacktrace add the stacktrace to exceptions
@@ -150,7 +205,7 @@ public abstract class AbstractStdListener implements LogListener {
 	public boolean hasSeenErrors(){
 		return errors;
 	}
-	/** clear flag of seen errors.
+	/** Clears flag of seen errors.
 	 */
 	public void clearErrors(){
 		errors=false;

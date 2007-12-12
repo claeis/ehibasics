@@ -19,7 +19,7 @@ package ch.ehi.basics.logging;
 
 /** The interface that each log event should implement.
  * @author ce
- * @version $Revision: 1.4 $ $Date: 2006-06-21 13:44:35 $
+ * @version $Revision: 1.5 $ $Date: 2007-12-12 09:52:02 $
  */
 public interface LogEvent {
 	/**	temporary messages to track down bugs. Should be removed 
@@ -38,7 +38,7 @@ public interface LogEvent {
 	/**	inform user about current system state (e.g. progress information)
 	 */
 	static final int STATE=5;
-	/**	inform user about adaptions take by the code (e.g. ignoring some supefluous input)
+	/**	inform user about adaptions take by the code (e.g. ignoring some superfluous input)
 	 */
 	static final int ADAPTION=6;
 	/**	errors (program errors or input errors)
