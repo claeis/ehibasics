@@ -4,12 +4,14 @@
   <!-- set global properties for this build -->
   <property name="src" value="${basedir}/src"/>
   <property name="build" value="${basedir}/build"/>
+  <property name="dist" value="${basedir}/dist"/>
 
   <target name="init">
     <!-- Create the time stamp -->
     <tstamp/>
     <property name="projectjar" value="${build}/jar/${ant.project.name}.jar"/>
     <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${dist}"/>
     <mkdir dir="${build}"/>
     <mkdir dir="${build}/jar"/>
   </target>
@@ -17,7 +19,7 @@
   <target depends="init" name="compile">
     <!-- Compile the java code from ${src} into ${build}/classes -->
     <mkdir dir="${build}/classes"/>
-    <javac destdir="${build}/classes" includes="**/*.java" excludes="**/bak~/*.java">
+    <javac destdir="${build}/classes" includes="**/*.java" excludes="**/bak~/*.java"  source="1.4" target="1.4">
       <!-- <classpath>
         <pathelement location="lib/jh.jar"/>
       </classpath>
@@ -30,11 +32,17 @@
 
   <target depends="init" name="javadocs">
     <mkdir dir="${build}/javadoc/api"/>
-    <javadoc Public="true" Windowtitle="ehibasics" destdir="${build}/javadoc/api">
+    <javadoc Public="true" Windowtitle="ehibasics" destdir="${build}/javadoc/api" packagenames="*">
     	<sourcepath path="${src}"/>
     </javadoc>
   </target>
 
+  <target depends="init" name="javadocs-ehilogger">
+    <mkdir dir="${build}/javadoc/ehilogger"/>
+    <javadoc Public="true" Windowtitle="EhiLogger" destdir="${build}/javadoc/ehilogger" packagenames="ch.ehi.basics.logging">
+    	<sourcepath path="${src}"/>
+    </javadoc>
+  </target>
 
   <target depends="init,compile" name="jar">
     <delete file="${projectjar}" quiet="true"/>
@@ -55,22 +63,38 @@
     <delete dir="${dist}"/>
   </target>
 
-  <target depends="init" name="copyres">
 
-    <copy toDir="${build}/classes">
-    	<fileset dir="${src}" includes="**/*.properties"/>
-    	<fileset dir="${src}" includes="**/*.gif"/>
-    	<fileset dir="${src}" includes="**/*.jpg"/>
-    </copy>
+  <target depends="init" name="logdist">
+	<property name="buildnr" value="${DSTAMP}"/>
+    <delete file="${dist}/ehilog-${buildnr}.src.zip" quiet="true"/>
+    <zip zipfile="${dist}/ehilog-${buildnr}.src.zip">
+    	<zipfileset dir=".">
+	    	<patternset includes="src/ch/ehi/basics/logging/**" excludes="**/CVS/*;**/bak~/*"/>
+    	</zipfileset>
+    </zip>
   </target>
-
-  <target depends="init" name="cleanres">
-
-    <delete>
-    	<fileset dir="${build}/classes" includes="**/*.properties"/>
-    	<fileset dir="${build}/classes" includes="**/*.gif"/>
-    	<fileset dir="${build}/classes" includes="**/*.jpg"/>
-    </delete>
+  <target depends="init" name="srcdist">
+	<property name="buildnr" value="${DSTAMP}"/>
+    <delete file="${dist}/${ant.project.name}-${buildnr}.src.zip" quiet="true"/>
+    <zip zipfile="${dist}/${ant.project.name}-${buildnr}.src.zip">
+    	<zipfileset dir="." prefix="${ant.project.name}-${buildnr}">
+	    	<patternset includes="build.xml"/>
+	    	<patternset includes="lib/**"/>
+	    	<patternset includes="other/manifest"/>
+	    	<patternset includes="other/LICENSE.*"/>
+	    	<patternset includes="src/**" excludes="**/CVS/*;**/bak~/*"/>
+		<patternset includes="resources/de/**/*.properties"/>
+		<patternset includes="resources/fr/**/*.properties"/>
+	    	<patternset includes="docs/bindist/*.txt"/>
+	    	<patternset includes="docs/README.src.txt"/>
+<!--
+	    	<patternset includes="doc/**"/>
+	    	<patternset includes="other/**"/>
+	    	<patternset includes="test/**"/>
+	    	<patternset includes="tools/**"/>
+-->
+    	</zipfileset>
+    </zip>
   </target>
 
 </project>
