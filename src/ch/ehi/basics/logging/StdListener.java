@@ -39,29 +39,11 @@ public class StdListener extends AbstractFilteringListener {
 	
 	private StdListener(){
 	}
-	private boolean infoSuppressed=false;
 	public void outputMsgLine(int kind,int level,String msg) {
-		if(!infoSuppressed || kind==LogEvent.ERROR){
 			if(msg.endsWith("\n")){
 				System.err.print(msg);
 			}else{
 				System.err.println(msg);
 			}
-		}
 	}
-
-	/** suppress all messages except errors.
-	 * @deprecated
-	 */
-	public boolean isInfoSuppressed() {
-		return infoSuppressed;
-	}
-
-	/**
-	 * @deprecated use skipInfo()
-	 */
-	public void setInfoSuppressed(boolean infoSuppressed) {
-		this.infoSuppressed = infoSuppressed;
-	}
-
 }

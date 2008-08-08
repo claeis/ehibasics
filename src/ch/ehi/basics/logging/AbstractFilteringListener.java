@@ -21,7 +21,7 @@ public abstract class AbstractFilteringListener extends AbstractStdListener {
 		if(kind==LogEvent.BACKEND_CMD && skipBackendCmd){
 			return true;
 		}
-		if(kind==LogEvent.STATE_TRACE && skipStateTrace){
+		if(kind==LogEvent.STATE && skipState){
 			return true;
 		}
 		if(kind==LogEvent.ADAPTION && skipAdaption){
