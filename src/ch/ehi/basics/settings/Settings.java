@@ -23,18 +23,20 @@ public class Settings {
 	}
 	public Settings(Settings src)
 	{
-		java.util.Iterator it=null;
-		it=src.values.keySet().iterator();
-		while(it.hasNext()){
-			String name=(String)it.next();
-			Object obj=src.values.get(name);
-			values.put(name,obj);
-		}
-		it=transientValues.keySet().iterator();
-		while(it.hasNext()){
-			String name=(String)it.next();
-			Object obj=src.transientValues.get(name);
-			transientValues.put(name,obj);
+		if(src!=null){
+			java.util.Iterator it=null;
+			it=src.values.keySet().iterator();
+			while(it.hasNext()){
+				String name=(String)it.next();
+				Object obj=src.values.get(name);
+				values.put(name,obj);
+			}
+			it=transientValues.keySet().iterator();
+			while(it.hasNext()){
+				String name=(String)it.next();
+				Object obj=src.transientValues.get(name);
+				transientValues.put(name,obj);
+			}
 		}
 		
 	}
