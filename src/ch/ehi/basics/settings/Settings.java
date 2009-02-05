@@ -17,6 +17,23 @@ import java.util.HashMap;
 public class Settings {
 	private HashMap values=new HashMap();
 	private HashMap transientValues=new HashMap();
+	public Settings(Settings src)
+	{
+		java.util.Iterator it=null;
+		it=src.values.keySet().iterator();
+		while(it.hasNext()){
+			String name=(String)it.next();
+			Object obj=src.values.get(name);
+			values.put(name,obj);
+		}
+		it=transientValues.keySet().iterator();
+		while(it.hasNext()){
+			String name=(String)it.next();
+			Object obj=src.transientValues.get(name);
+			transientValues.put(name,obj);
+		}
+		
+	}
 	/** gets a property value.
 	 * @param name of property.
 	 * @return value or null. Never returns an empty String.
@@ -105,5 +122,29 @@ public class Settings {
 		java.util.Properties prop=new java.util.Properties();
 		prop.load(inStream);
 		values.putAll(prop);
+	}
+	public String toString()
+	{
+		StringBuffer ret=new StringBuffer();
+		java.util.Iterator it=values.keySet().iterator();
+		java.util.Iterator it2=transientValues.keySet().iterator();
+		if(it.hasNext() || it2.hasNext()){
+			String sep="";
+			ret.append("Settings{");
+			while(it.hasNext()){
+				String name=(String)it.next();
+				Object obj=values.get(name);
+				ret.append(sep+name+"="+obj.toString());
+				sep=";";
+			}
+			while(it2.hasNext()){
+				String name=(String)it2.next();
+				Object obj=transientValues.get(name);
+				ret.append(sep+name+"="+obj.toString());
+				sep=";";
+			}
+			ret.append("}");
+		}
+		return ret.toString();
 	}
 }
