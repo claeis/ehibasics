@@ -17,6 +17,10 @@ import java.util.HashMap;
 public class Settings {
 	private HashMap values=new HashMap();
 	private HashMap transientValues=new HashMap();
+	public Settings()
+	{
+		
+	}
 	public Settings(Settings src)
 	{
 		java.util.Iterator it=null;
