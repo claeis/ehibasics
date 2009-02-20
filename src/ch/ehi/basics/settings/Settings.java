@@ -129,6 +129,18 @@ public class Settings {
 		prop.load(inStream);
 		values.putAll(prop);
 	}
+	/** get the list of property names.
+	 * @return set<String valueName>
+	 */
+	public java.util.Set getValues(){
+		return values.keySet();
+	}
+	/** get the list of transient property names.
+	 * @return set<String valueName>
+	 */
+	public java.util.Set getTransientValues(){
+		return transientValues.keySet();
+	}
 	public String toString()
 	{
 		StringBuffer ret=new StringBuffer();
