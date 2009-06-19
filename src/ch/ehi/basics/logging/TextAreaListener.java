@@ -24,6 +24,11 @@ import javax.swing.JTextArea;
  * @version $Revision: 1.2 $ $Date: 2007-12-12 09:52:02 $
  */
 public class TextAreaListener extends ch.ehi.basics.logging.AbstractFilteringListener {
+	public TextAreaListener(){
+	}
+	public TextAreaListener(JTextArea out){
+		errOutput=out;
+	}
 	public void outputMsgLine(int arg0, int arg1, String msg) {
 		if(errOutput!=null){
 			if(msg.endsWith("\n")){
@@ -36,8 +41,8 @@ public class TextAreaListener extends ch.ehi.basics.logging.AbstractFilteringLis
 	private JTextArea  errOutput=null;
 	/** Defines the output GUI control.
 	 */
-	public void setOutputArea(JTextArea  err)
+	public void setOutputArea(JTextArea  out)
 	{
-		errOutput=err;
+		errOutput=out;
 	}
 }
