@@ -17,9 +17,6 @@
  */
 package ch.ehi.basics.logging;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import ch.ehi.basics.logging.*;
 import java.io.PrintWriter;
 import java.io.File;
 

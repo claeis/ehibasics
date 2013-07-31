@@ -17,9 +17,6 @@
  */
 package ch.ehi.basics.logging;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.lang.reflect.InvocationTargetException;
 
 /** Default logging listener that just logs to System.err.
  * @author ce
