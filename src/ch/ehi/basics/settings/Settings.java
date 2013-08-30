@@ -1,5 +1,6 @@
 package ch.ehi.basics.settings;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /** This class represents a set of properties (name-value pairs). 
@@ -15,21 +16,27 @@ import java.util.HashMap;
  *
  */
 public class Settings {
-	private HashMap values=new HashMap();
+	private HashMap<String,String> values=new HashMap<String,String>();
+	private ArrayList<String> orderedKeys=null;
 	private HashMap transientValues=new HashMap();
 	public Settings()
 	{
-		
+		this(false);
+	}
+	public Settings(boolean keepOrderOfDefs)
+	{
+		if(keepOrderOfDefs){
+			orderedKeys=new ArrayList<String>();
+		}
 	}
 	public Settings(Settings src)
 	{
 		if(src!=null){
-			java.util.Iterator it=null;
-			it=src.values.keySet().iterator();
+			java.util.Iterator<String> it=src.getValuesIterator();
 			while(it.hasNext()){
-				String name=(String)it.next();
-				Object obj=src.values.get(name);
-				values.put(name,obj);
+				String name=it.next();
+				String obj=src.values.get(name);
+				setValue(name,obj);
 			}
 			it=transientValues.keySet().iterator();
 			while(it.hasNext()){
@@ -51,8 +58,14 @@ public class Settings {
 	public void setValue(String name,String value) {
 		value=ch.ehi.basics.tools.StringUtility.purge(value);
 		if(value==null){
+			if(orderedKeys!=null && orderedKeys.contains(name)){
+				orderedKeys.remove(name);
+			}
 			values.remove(name);
 		}else{
+			if(orderedKeys!=null && !orderedKeys.contains(name)){
+				orderedKeys.add(name);
+			}
 			values.put(name, value);
 		}
 	}
@@ -127,13 +140,21 @@ public class Settings {
 	{
 		java.util.Properties prop=new java.util.Properties();
 		prop.load(inStream);
-		values.putAll(prop);
+		for(String key:prop.stringPropertyNames()){
+			setValue(key,prop.getProperty(key));
+		}
 	}
 	/** get the list of property names.
 	 * @return set<String valueName>
 	 */
 	public java.util.Set getValues(){
 		return values.keySet();
+	}
+	public java.util.Iterator<String> getValuesIterator(){
+		if(orderedKeys!=null){
+			return orderedKeys.iterator();
+		}
+		return values.keySet().iterator();
 	}
 	/** get the list of transient property names.
 	 * @return set<String valueName>
@@ -144,13 +165,13 @@ public class Settings {
 	public String toString()
 	{
 		StringBuffer ret=new StringBuffer();
-		java.util.Iterator it=values.keySet().iterator();
+		java.util.Iterator<String> it=getValuesIterator();
 		java.util.Iterator it2=transientValues.keySet().iterator();
 		if(it.hasNext() || it2.hasNext()){
 			String sep="";
 			ret.append("Settings{");
 			while(it.hasNext()){
-				String name=(String)it.next();
+				String name=it.next();
 				Object obj=values.get(name);
 				ret.append(sep+name+"="+obj.toString());
 				sep=";";
