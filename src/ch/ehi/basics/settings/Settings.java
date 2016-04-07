@@ -18,7 +18,7 @@ import java.util.HashMap;
 public class Settings {
 	private HashMap<String,String> values=new HashMap<String,String>();
 	private ArrayList<String> orderedKeys=null;
-	private HashMap transientValues=new HashMap();
+	private HashMap<String,Object> transientValues=new HashMap<String,Object>();
 	public Settings()
 	{
 		this(false);
@@ -147,7 +147,7 @@ public class Settings {
 	/** get the list of property names.
 	 * @return set<String valueName>
 	 */
-	public java.util.Set getValues(){
+	public java.util.Set<String> getValues(){
 		return values.keySet();
 	}
 	public java.util.Iterator<String> getValuesIterator(){
@@ -159,7 +159,7 @@ public class Settings {
 	/** get the list of transient property names.
 	 * @return set<String valueName>
 	 */
-	public java.util.Set getTransientValues(){
+	public java.util.Set<String> getTransientValues(){
 		return transientValues.keySet();
 	}
 	public String toString()

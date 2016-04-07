@@ -1,6 +1,7 @@
 package ch.ehi.basics.view;
 
 import java.io.File;
+
 import javax.swing.filechooser.*;
 
 /** Example usage:
@@ -88,13 +89,6 @@ public static GenericFileFilter createXmlSchemaFilter() {
     public String getExtension() {
         return extension;
     }
-    /** Get the extension of a file.
-     * @return e.g. "xml"
-     */
-    public static String getFileExtension(File f) {
-        String s = f.getName();
-        return getFileExtension(s);
-    }
 	/** Get the extension of a file name.
 	 * @return e.g. "xml"
 	 */
@@ -107,6 +101,13 @@ public static GenericFileFilter createXmlSchemaFilter() {
 		}
 		return ext;
 	}
+	/** Get the extension of a file.
+     * @return e.g. "xml"
+     */
+    public static String getFileExtension(File f) {
+        String s = f.getName();
+        return getFileExtension(s);
+    }
 	/** Get the filename without extension.
 	 * @return e.g. "export"
 	 */
