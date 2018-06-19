@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project basedir="." default="jar" name="ehibasics">
+<project basedir="." default="jar" name="ehibasics" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 
   <!-- set global properties for this build -->
   <property name="src" value="${basedir}/src"/>
   <property name="build" value="${basedir}/build"/>
   <property name="dist" value="${basedir}/dist"/>
+  <property file="user.properties" prefix="user."/>
+  <property name="groupId" value="ch.ehi"/>
+  <property name="artifactId" value="${ant.project.name}"/>
+  <property name="release" value=""/>
 
   <target name="init">
     <!-- Create the time stamp -->
@@ -18,9 +22,41 @@
         
   </target>
 
+  
+<!--
+    The pom file, located in the archive in META-INF/maven/${groupId}/${artifactId}/pom.xml
+    A pom.properties file, located in the archive in META-INF/maven/${groupId}/${artifactId}/pom.properties
+    http://maven.apache.org/shared/maven-archiver/#pom-properties-content
+-->
+  <target depends="init,buildnr" name="pom">
+  	<artifact:pom id="mypomE" groupId="${groupId}" artifactId="${artifactId}" version="${buildnr}" name="ehibasics">
+	  </artifact:pom>
+	  <artifact:writepom pomRefId="mypomE" file="build/pom.xml"/>
+	<artifact:pom id="mypom" file="build/pom.xml" />
+  </target>
+  <target depends="init,pom" name="install">
+	  <!-- artifact:install-provider artifactId="wagon-ftp" version="3.0.0"/ -->
+	  <artifact:install file="build/jar/ehibasics.jar">
+		<artifact:pom refid="mypom"/>
+		<!-- artifact:attach file="build/jar/ehibasics-0.9-SNAPSHOT.jar" type="jar"/ -->    
+	  </artifact:install>
+  </target>
+  <target depends="init,pom" name="deploy">
+	  <artifact:install-provider artifactId="wagon-ftp" version="3.0.0"/>
+  <artifact:deploy file="build/jar/ehibasics.jar">
+    <remoteRepository url="ftp://ftp.interlis.ch">
+    	<authentication username="${user.repos_usr}" password="${user.repos_pwd}"/>
+    </remoteRepository>
+    <pom refid="mypom"/>
+  </artifact:deploy>    
+  </target>
+
   <target depends="init" name="buildnr">
     <property file="${versionfile}" prefix="buildnr."/>
-    <property name="buildnr" value="${buildnr.versionMajor}.${buildnr.versionMinor}.${buildnr.versionMicro}"/>
+    <condition property="SNAPSHOT" value="" else="-SNAPSHOT">
+       <length string="${release}" trim="true" when="greater" length="0"/>
+    </condition>
+    <property name="buildnr" value="${buildnr.versionMajor}.${buildnr.versionMinor}.${buildnr.versionMicro}${SNAPSHOT}"/>
     <!--  <property name="buildnr" value="${DSTAMP}"/>  -->
   </target>
   
