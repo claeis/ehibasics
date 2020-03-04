@@ -68,7 +68,7 @@ sourceSets {
             exclude "**/Version.properties"
         }
         resources {
-            srcDirs=["resources/de","resources/fr","resources/ru"]
+            srcDirs=["resources/de","resources/fr","resources/ru","resources/es"]
             include "**/*.properties"
         }
   }
