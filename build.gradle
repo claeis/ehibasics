@@ -1,4 +1,4 @@
-group 'ch.interlis'
+group 'ch.ehi'
 version '1.3.0'+System.getProperty('release','-SNAPSHOT')
 
 apply plugin: "java"
