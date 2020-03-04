@@ -63,13 +63,9 @@ sourceSets {
     	srcDirs=['src']
     }
         resources {
-            srcDir "src"
+            srcDirs=["src","resources/de","resources/fr","resources/ru","resources/es"]
             include "**/*.properties"
             exclude "**/Version.properties"
-        }
-        resources {
-            srcDirs=["resources/de","resources/fr","resources/ru","resources/es"]
-            include "**/*.properties"
         }
   }
   test {
