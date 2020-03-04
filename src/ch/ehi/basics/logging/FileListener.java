@@ -33,7 +33,7 @@ public class FileListener extends AbstractFilteringListener {
 			try{
 				out=new PrintWriter(new java.io.BufferedWriter(new java.io.FileWriter(file)));
 			}catch(java.io.IOException ex){
-				StdListener.getInstance().logEvent(new StdLogEvent(LogEvent.ERROR,null,ex,null));
+				EhiLogger.getInstance().logInternalEventFromListener(this,new StdLogEvent(LogEvent.ERROR,null,ex,null));
 			}
 		}
 		if(out!=null){

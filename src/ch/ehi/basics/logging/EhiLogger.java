@@ -27,7 +27,7 @@ package ch.ehi.basics.logging;
  */
 public class EhiLogger {
 	static private EhiLogger instance=null; 
-	private java.util.Set logListenerv = new java.util.HashSet();
+	private java.util.Set<LogListener> logListenerv = new java.util.HashSet<LogListener>();
 	/** adds a Listener.
 	 */
 	public void addListener(LogListener logListener)
@@ -91,37 +91,77 @@ public class EhiLogger {
 	/** dispatch any log event.
 	 */
 	public void logEvent(LogEvent event){
-		// filter event
-		int kind=event.getEventKind();
-		if(getInstance().filterTrace){
-			if(kind==LogEvent.DEBUG_TRACE
-				|| kind==LogEvent.STATE_TRACE
-				|| kind==LogEvent.UNUSUAL_STATE_TRACE
-				|| kind==LogEvent.BACKEND_CMD
-				){
-				return;		
-			}
-		}
-		if(kind<LogEvent.FIRST_KIND || kind>LogEvent.LAST_KIND){
-			StdListener.getInstance().logEvent(new StdLogEvent(LogEvent.ERROR,"illegal kind",null,getOrigin()));
-			return;
-		}
-		String msg=event.getEventMsg();
-		if((msg==null || msg.trim().length()==0) && event.getException()==null){
-			StdListener.getInstance().logEvent(new StdLogEvent(LogEvent.ERROR,"null or empty log-message",null,getOrigin()));
-			return;
-		}
-		// notify event to all registered listeners
-		java.util.Iterator it=getInstance().logListenerv.iterator();
-		while(it.hasNext()){
-		  LogListener listener=(LogListener)it.next();
-		  try{
-			listener.logEvent(event);
-		  }catch(Throwable ex){
-		  	StdListener.getInstance().logEvent(new StdLogEvent(LogEvent.ERROR,null,ex,getOrigin()));
-		  }
-		}
+        logInternalEvent(getInstance().logListenerv, event);
 	}
+    private void logInternalEvent(java.util.Set<LogListener> listeners,LogEvent event){
+        // filter event
+        int kind=event.getEventKind();
+        if(getInstance().filterTrace){
+            if(kind==LogEvent.DEBUG_TRACE
+                || kind==LogEvent.STATE_TRACE
+                || kind==LogEvent.UNUSUAL_STATE_TRACE
+                || kind==LogEvent.BACKEND_CMD
+                ){
+                return;     
+            }
+        }
+        if(kind<LogEvent.FIRST_KIND || kind>LogEvent.LAST_KIND){
+            StdLogEvent internalEvent=new StdLogEvent(LogEvent.ERROR,"illegal kind",null,getOrigin());
+            if(listeners==null) {
+                StdListener.getInstance().logEvent(internalEvent);
+            }else {
+                logInternalEvent(listeners,internalEvent);
+            }
+            return;
+        }
+        String msg=event.getEventMsg();
+        if((msg==null || msg.trim().length()==0) && event.getException()==null){
+            StdLogEvent internalEvent=new StdLogEvent(LogEvent.ERROR,"null or empty log-message",null,getOrigin());
+            if(listeners==null) {
+                StdListener.getInstance().logEvent(internalEvent);
+            }else {
+                logInternalEvent(listeners,internalEvent);
+            }
+            return;
+        }
+        // notify event to all registered listeners
+        if(listeners==null || listeners.size()==0) {
+            StdListener.getInstance().logEvent(event);
+        }else {
+            java.util.Iterator<LogListener> it=listeners.iterator();
+            while(it.hasNext()){
+              LogListener listener=(LogListener)it.next();
+              try{
+                listener.logEvent(event);
+              }catch(Throwable ex){
+                  it.remove();
+                  StdLogEvent internalEvent=new StdLogEvent(LogEvent.ERROR,null,ex,getOrigin());
+                  logInternalEvent(listeners,internalEvent);
+              }
+            }
+        }
+        
+    }
+    private int recursive=0;
+    private java.util.Set<LogListener> healthyListeners=null;
+    /** report LogListener internal errors.
+     * @param caller log listener that is the source of the error.
+     * @param event message to log
+     */
+    public void logInternalEventFromListener(LogListener caller,LogEvent event){
+        if(recursive==0) {
+            healthyListeners=new java.util.HashSet<LogListener>(getInstance().logListenerv);
+        }
+        if(caller!=null) {
+            healthyListeners.remove(caller);
+        }
+        try {
+            recursive++;
+            logInternalEvent(healthyListeners, event);
+        }finally {
+            recursive--;
+        }
+    }
 	/**	temporarly log a message to track down bugs. Calls to this function 
 	 * should be removed when the bug is fixed.
 	 */

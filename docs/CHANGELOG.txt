@@ -1,3 +1,7 @@
+LATEST
+-------------------------------
+- added EhiLogger.logInternalEventFromListener() to report LogListener internal errors
+
 ehibasics 1.2.0 (2018-06-19)
 -------------------------------
 - added OutParam
