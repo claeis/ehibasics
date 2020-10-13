@@ -53,10 +53,9 @@ public class Settings {
 	 */
 	public String getValue(String name) {
 		String value=(String)values.get(name);
-		return ch.ehi.basics.tools.StringUtility.purge(value);
+		return value;
 	}
 	public void setValue(String name,String value) {
-		value=ch.ehi.basics.tools.StringUtility.purge(value);
 		if(value==null){
 			if(orderedKeys!=null && orderedKeys.contains(name)){
 				orderedKeys.remove(name);
@@ -75,15 +74,9 @@ public class Settings {
 	 */
 	public Object getTransientObject(String name) {
 		Object value=transientValues.get(name);
-		if(value!=null && value instanceof String){
-			return ch.ehi.basics.tools.StringUtility.purge((String)value);
-		}
 		return value;
 	}
 	public void setTransientObject(String name,Object value) {
-		if(value!=null && value instanceof String){
-			value=ch.ehi.basics.tools.StringUtility.purge((String)value);
-		}
 		if(value==null){
 			transientValues.remove(name);
 		}else{
