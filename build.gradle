@@ -63,7 +63,8 @@ sourceSets {
     	srcDirs=['src']
     }
         resources {
-            srcDirs=["src","resources/de","resources/fr","resources/ru","resources/es"]
+            srcDirs=["src","resources"]
+			include 'META-INF/native-image/**/*'
             include "**/*.properties"
             exclude "**/Version.properties"
         }

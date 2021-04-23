@@ -1,0 +1,6 @@
+{
+  "bundles":[
+    {"name":"ch.ehi.basics.view.resources.FileChooser"}, 
+    {"name":"ch.ehi.basics.view.resources.GenericFileFilter"}
+  ]
+}
